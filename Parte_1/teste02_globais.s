@@ -13,4 +13,4 @@ global:
    vetorInt: d := [ 3 , 6 , 5 ]
 
 ação:
-   aa(15);
+   aa(15)

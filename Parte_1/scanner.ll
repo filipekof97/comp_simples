@@ -11,7 +11,6 @@
 #define COL(col) driver.location_->columns(col)
 #define LINE(line) do {driver.location_->lines(line);} while (0)
 #define YY_USER_ACTION COL(yyleng);
-#define MAX_STR_CONST 1024
 
 /* import the parser's token type into a local typedef */
 typedef Simples::Parser::token token;

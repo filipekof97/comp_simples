@@ -155,14 +155,8 @@ lista_declaracoes_de_funcao:
    ;
 
 acao:
-   ACAO DOISPONTOS lista_comandos_debug
+   ACAO DOISPONTOS lista_comandos
    ;
-
-lista_comandos_debug:
-   /* empty */
-   |lista_comandos
-   ;
-
 
 /* TIPOS */
 
@@ -269,14 +263,10 @@ fator:
    ;
 
 literal:
-	INTEIRO { std::cout << $1 << std::endl;}
+	INTEIRO
 	| REAL
    | CADEIA
    ;
-
-//chamada_de_procedimento:
-//	IDENTIFICADOR PARENTESESESQUERDO lista_args_chamada PARENTESESDIREITO
-//   ;
 
 chamada_de_funcao:
   IDENTIFICADOR PARENTESESESQUERDO lista_args_chamada PARENTESESDIREITO
@@ -292,7 +282,7 @@ lista_comandos:
 
 comando:
    local ATRIBUICAO expr
-   | chamada_de_funcao //chamada_de_procedimento
+   | chamada_de_funcao
    | SE expr VERDADEIRO lista_comandos FSE
    | SE expr VERDADEIRO lista_comandos FALSO lista_comandos FSE
    | PARA IDENTIFICADOR DE expr LIMITE expr FACA lista_comandos FPARA
