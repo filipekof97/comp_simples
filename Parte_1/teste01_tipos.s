@@ -6,4 +6,4 @@ tipo:
    regint = { numero1: inteiro , numero2: inteiro }
 
 ação:
-   aa(15)
+   teste(15)
