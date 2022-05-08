@@ -21,9 +21,6 @@ typedef Simples::Parser::token_type token_type;
  * by default returns 0, which is not of token_type. */
 #define yyterminate() return token::TOK_EOF
 
-char string_buf[MAX_STR_CONST];
-char *string_buf_ptr;
-
 %}
 
 /*** Flex Declarations and Options ***/
@@ -56,9 +53,8 @@ blank   [ \t]+
 eol     [\n\r]+
 
 /* Start Conditions */
-%x commentStartCond
-%x stringStartCond
-%s instring
+%x comentario
+
 
 %%
 
@@ -118,9 +114,6 @@ eol     [\n\r]+
 "função"     {return token::FUNCAO;}
 "faça"       {return token::FACA;}
 
-"imprimir"   {return token::IMPRIMIR;}
-
-
  /*** BEGIN EXAMPLE - Change the example lexer rules below ***/
 
 [0-9]+ {
@@ -141,6 +134,12 @@ eol     [\n\r]+
 \"([^\\\"]|\\.)*\"  {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::CADEIA;
+}
+
+"/*" BEGIN(comentario);
+<comentario>"*/" {
+   BEGIN(INITIAL);
+   STEP();
 }
 
 

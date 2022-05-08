@@ -124,92 +124,90 @@
 %token ATRIBUICAO         ":="
 %token DECLARACAO         "="
 
-%token IMPRIMIR           "imprimir"
-
-
 %%
 
 
 /* PROGRAMA */
 
-programa: declaracoes /* Revisado */
+programa: declaracoes
    acao
    ;
 
-declaracoes: /* Revisado */
+declaracoes:
    lista_declaracao_de_tipo
    lista_declaracao_de_variavel_global
    lista_declaracoes_de_funcao
    ;
 
-lista_declaracao_de_tipo: /* Revisado */
+lista_declaracao_de_tipo:
    //empty
    |TIPO DOISPONTOS lista_declaracao_tipo
    ;
 
-lista_declaracao_de_variavel_global: /* Revisado */
+lista_declaracao_de_variavel_global:
    //empty
    |GLOBAL DOISPONTOS lista_declaracao_variavel
    ;
 
-lista_declaracoes_de_funcao: /* Revisado */
+lista_declaracoes_de_funcao:
    //empty
    |FUNCAO DOISPONTOS lista_declaracao_funcao
    ;
 
-acao: /* Revisado */
+acao:
    ACAO DOISPONTOS lista_comandos_debug
    ;
 
-lista_comandos_debug: /* Revisado */
+lista_comandos_debug:
    /* empty */
    |lista_comandos
    ;
 
+
 /* TIPOS */
 
-lista_declaracao_tipo: /* Revisado */
+lista_declaracao_tipo:
    declaracao_tipo
    | lista_declaracao_tipo declaracao_tipo
    ;
 
-declaracao_tipo: /* Revisado */
+declaracao_tipo:
    IDENTIFICADOR DECLARACAO descritor_tipo
    ;
 
-descritor_tipo: /* Revisado */
+descritor_tipo:
    IDENTIFICADOR
    | CHAVESESQUERDA tipo_campos CHAVESDIREITA
    | COLCHETESESQUERDO tipo_constantes COLCHETESDIREITO DE IDENTIFICADOR
    ;
 
-tipo_campos: /* Revisado */
+tipo_campos:
    tipo_campo
    | tipo_campos VIRGULA tipo_campo
    ;
 
-tipo_campo: /* Revisado */
+tipo_campo:
    IDENTIFICADOR DOISPONTOS IDENTIFICADOR
    ;
 
-tipo_constantes: /* Revisado */
+tipo_constantes:
    constante_inteiro
    | tipo_constantes VIRGULA constante_inteiro
    ;
 
-constante_inteiro: /* Revisado */
+constante_inteiro:
    INTEIRO
    ;
 
 
 /* VARIAVEIS*/
 
-lista_declaracao_variavel: /* Revisado */
+lista_declaracao_variavel:
 	declaracao_variavel
 	| lista_declaracao_variavel declaracao_variavel
    ;
 
-declaracao_variavel: /* Revisado */
+declaracao_variavel:
    IDENTIFICADOR DOISPONTOS IDENTIFICADOR ATRIBUICAO expr
    ;
 
@@ -217,52 +215,52 @@ declaracao_variavel: /* Revisado */
 
 /* FUNCOES */
 
-lista_declaracao_funcao: /* Revisado */
+lista_declaracao_funcao:
 	declaracao_funcao
 	| lista_declaracao_funcao declaracao_funcao
    ;
 
-declaracao_funcao:  /* Revisado */
+declaracao_funcao:
 	IDENTIFICADOR PARENTESESESQUERDO lista_de_args  PARENTESESDIREITO DECLARACAO corpo
 	| IDENTIFICADOR PARENTESESESQUERDO lista_de_args  PARENTESESDIREITO DOISPONTOS IDENTIFICADOR DECLARACAO corpo
    ;
 
-lista_de_args:  /* Revisado */
+lista_de_args:
    /* empty */
    | lista_args
    ;
 
-lista_args:  /* Revisado */
+lista_args:
   args
   | lista_args VIRGULA args
   ;
 
-args:  /* Revisado */
+args:
    modificador IDENTIFICADOR DOISPONTOS IDENTIFICADOR
    ;
 
-modificador:  /* Revisado */
+modificador:
 	VALOR
    |REF
    ;
 
-corpo: /* Revisado */
+corpo:
 	lista_declaracao_de_variavel_local
 	ACAO DOISPONTOS lista_comandos
    ;
 
-lista_declaracao_de_variavel_local: /* Revisado */
+lista_declaracao_de_variavel_local:
 	//empty
 	| LOCAL DOISPONTOS lista_declaracao_variavel
    ;
 
-lista_args_chamada: /* Revisado */
+lista_args_chamada:
    /* empty */
    | expr
    | lista_args_chamada VIRGULA expr
    ;
 
-fator: /* Revisado */
+fator:
 	PARENTESESESQUERDO expr PARENTESESDIREITO
 	| literal
 	| local
@@ -270,30 +268,31 @@ fator: /* Revisado */
 	| NULO
    ;
 
-literal: /* Revisado */
-	INTEIRO
+literal:
+	INTEIRO { std::cout << $1 << std::endl;}
 	| REAL
    | CADEIA
    ;
 
-chamada_de_procedimento: /* Revisado */
-	IDENTIFICADOR PARENTESESESQUERDO lista_args_chamada PARENTESESDIREITO
-   ;
+//chamada_de_procedimento:
+//	IDENTIFICADOR PARENTESESESQUERDO lista_args_chamada PARENTESESDIREITO
+//   ;
 
-chamada_de_funcao: /* Revisado */
+chamada_de_funcao:
   IDENTIFICADOR PARENTESESESQUERDO lista_args_chamada PARENTESESDIREITO
    ;
 
+
 /* COMANDOS */
 
-lista_comandos: /* Revisado */
+lista_comandos:
    comando
    | lista_comandos PONTOEVIRGULA comando
    ;
 
-comando: /* Revisado */
+comando:
    local ATRIBUICAO expr
-   | chamada_de_procedimento
+   | chamada_de_funcao //chamada_de_procedimento
    | SE expr VERDADEIRO lista_comandos FSE
    | SE expr VERDADEIRO lista_comandos FALSO lista_comandos FSE
    | PARA IDENTIFICADOR DE expr LIMITE expr FACA lista_comandos FPARA
@@ -306,27 +305,27 @@ comando: /* Revisado */
 
 /* EXPRESSOES */
 
-expr: /* Revisado */
+expr:
    expressao_logica
 	| CHAVESESQUERDA criacao_de_registro CHAVESDIREITA
    ;
 
-criacao_de_registro: /* Revisado */
+criacao_de_registro:
 	atribuicao_de_registro
 	| criacao_de_registro VIRGULA atribuicao_de_registro
    ;
 
-atribuicao_de_registro: /* Revisado */
+atribuicao_de_registro:
    IDENTIFICADOR DECLARACAO expr
    ;
 
-expressao_logica: /* Revisado */
+expressao_logica:
    expressao_logica E expressao_relacional
    | expressao_logica OU expressao_relacional
    | expressao_relacional
    ;
 
-expressao_relacional: /* Revisado */
+expressao_relacional:
 	expressao_relacional MENOROUIGUAL expressao_aritmetica
    | expressao_relacional MAIOROUIGUAL expressao_aritmetica
    | expressao_relacional MENOR expressao_aritmetica
@@ -336,19 +335,19 @@ expressao_relacional: /* Revisado */
    | expressao_aritmetica
    ;
 
-expressao_aritmetica: /* Revisado */
+expressao_aritmetica:
 	expressao_aritmetica MAIS termo
 	| expressao_aritmetica MENOS termo
 	| termo
    ;
 
-local: /* Revisado */
+local:
    IDENTIFICADOR
 	| local PONTO IDENTIFICADOR
-	| local COLCHETESESQUERDO lista_args_chamada COLCHETESDIREITO
+	| COLCHETESESQUERDO lista_args_chamada COLCHETESDIREITO
    ;
 
-termo: /* Revisado */
+termo:
 	termo ASTERISCO fator
 	| termo BARRA fator
 	| fator
