@@ -57,65 +57,6 @@ eol     [\n\r]+
   STEP();
 %}
 
-
-
-
-
-
-","   {return VIRGULA;}
-":"   {return DOISPONTOS;}
-";"   {return PONTOEVIRGULA;}
-"("   {return PARENTESESESQUERDA;}
-")"   {return PARENTESESDIREITA;}
-"["   {return COLCHETESESQUERDA;}
-"]"   {return COLCHETESDIREITA;}
-"{"   {return CHAVESESQUERDA;}
-"}"   {return CHAVESDIREITA;}
-"."   {return PONTO;}
-"+"   {return MAIS;}
-"-"   {return MENOS;}
-"*"   {return ASTERISCO;}
-"/"   {return BARRA;}
-":="  {return ATRIBUICAO;}
-"=="  {return COMPARACAO;}
-"!="  {return DIFERENTE;}
-"<"   {return MENOR;}
-"<="  {return MENOROUIGUAL;}
-">"   {return MAIOR;}
-">="  {return MAIOROUIGUAL;}
-"&"   {return ECOMERCIAL;}
-"|"   {return PIPE;}
-"="   {return DECLARACAO;}
-
-
-
-
-
-"cadeia"     {return CADEIA;}
-"valor"      {return VALOR;}
-"ref"        {return REF;}
-"retorne"    {return RETORNE;}
-"nulo"       {return NULO;}
-"ini­cio"     {return INICIO;}
-"fim"        {return FIM;}
-"pare"       {return PARE;}
-"continue"   {return CONTINUE;}
-"para"       {return PARA;}
-"fpara"      {return FPARA;}
-"enquanto"   {return ENQUANTO;}
-"fenquanto"  {return FENQUANTO;}
-"faca"       {return FACA;}
-"se"         {return SE;}
-"fse"        {return FSE;}
-"verdadeiro" {return VERDADEIRO;}
-"falso"      {return FALSO;}
-"tipo"       {return TIPO;}
-"de"         {return DE;}
-"limite"     {return LIMITE;}
-"global"     {return GLOBAL;}
-"local"      {return LOCAL;}
-
-
  /*** BEGIN EXAMPLE - Change the example lexer rules below ***/
 
 [0-9]+ {
@@ -132,23 +73,6 @@ eol     [\n\r]+
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::IDENTIFIER;
 }
-
-"/*" {comment_level+=1; BEGIN COMMENT;}
-<COMMENT>"*/" {comment_level-=1; if(comment_level==0) BEGIN 0;}
-<COMMENT><<EOF>> {EM_error(EM_tokPos,"unclosed comment");
-  yyterminate();}
-<COMMENT>.
-
-\"   {adjust(); init_string_buffer(); BEGIN INSTRING;}
-<INSTRING>\"  {adjust(); yylval.sval = String(string_buffer); BEGIN 0; return STRING;}
-<INSTRING>\n  {adjust(); EM_error(EM_tokPos,"unclose string: newline appear in string"); yyterminate();}
-<INSTRING><<EOF>> {adjust(); EM_error(EM_tokPos,"unclose string"); yyterminate();}
-<INSTRING>\\[0-9]{3} {adjust(); int tmp; sscanf(yytext+1, "%d", &tmp);
-                      if(tmp > 0xff) { EM_error(EM_tokPos,"ascii code out of range"); yyterminate(); }
-                      append_to_buffer(tmp);
-                      }
-
-
 
 {blank} { STEP(); }
 

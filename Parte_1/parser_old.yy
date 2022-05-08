@@ -1,3 +1,7 @@
+/*
+ * PARSER
+ */
+
 %{
 
 /*** C++ Declarations ***/
@@ -49,47 +53,33 @@
 /* use newer C++ skeleton file */
 %skeleton "lalr1.cc"
 /* Entry point of grammar */
-%start programa
-
+%start program
 
 %union
 {
  /* YYLTYPE */
-  int             integerVal;
-  double          doubleVal;
-  std::string*    stringVal;  
+  int  			      integerVal;
+  double 			    doubleVal;
+  std::string*		stringVal;
 }
 
 /* Tokens */
-%token              TOK_EOF 0   "end of file"
-%token              EOL         "end of line"
-%token <integerVal> INTEIRO     "inteiro"
-%token <doubleVal>  REAL        "real"
-%token <stringVal>  IDENTIFIER  "identificador"
-
-%token PARENTESESESQUERDO "("
-%token PARENTESESDIREITO  ")"
-
-%token ATRIBUICAO  ":="
-%token PRINT       "print"
-
+%token              TOK_EOF 0     "end of file"
+%token			        EOL		        "end of line"
+%token <integerVal> INTEGER		    "integer"
+%token <doubleVal> 	REAL		    "real"
+%token <stringVal> 	IDENTIFIER    "identifier"
 
 %%
 
+program:  /* empty */
+        | constant
+        | variable
 
+constant : INTEGER { std::cout << "Inteiro: " << $1 << std::endl; }
+         | REAL  { std::cout << "Real: " << $1 << std::endl; }
 
-
-/* PROGRAMA */
-
-programa: lista_comandos
-   
-
-lista_comandos:
-  
-  PRINT PARENTESESESQUERDO args PARENTESESDIREITO
-
-
-
+variable : IDENTIFIER {  std::cout << "Identificador: " << *$1 << std::endl; }
 
 %%
 
