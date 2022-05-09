@@ -298,6 +298,7 @@ comando:
 expr:
    expressao_logica
 	| CHAVESESQUERDA criacao_de_registro CHAVESDIREITA
+   | COLCHETESESQUERDO criacao_de_vetor COLCHETESDIREITO
    ;
 
 criacao_de_registro:
@@ -307,6 +308,16 @@ criacao_de_registro:
 
 atribuicao_de_registro:
    IDENTIFICADOR DECLARACAO expr
+   ;
+
+criacao_de_vetor:
+   atribuicao_de_vetor
+   |criacao_de_vetor VIRGULA atribuicao_de_vetor
+   ;
+
+atribuicao_de_vetor:
+   /*empty*/
+   |expr
    ;
 
 expressao_logica:
@@ -334,7 +345,7 @@ expressao_aritmetica:
 local:
    IDENTIFICADOR
 	| local PONTO IDENTIFICADOR
-	| COLCHETESESQUERDO lista_args_chamada COLCHETESDIREITO
+	| local COLCHETESESQUERDO lista_args_chamada COLCHETESDIREITO
    ;
 
 termo:
