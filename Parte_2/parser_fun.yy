@@ -141,6 +141,7 @@ std::map<std::string, int> hashMap;
 %%
 
 
+
 programa: lista_comandos
    ;
 
@@ -160,7 +161,8 @@ comando_atribuicao:
    ;
 
 chamada_funcao:
-	IMPRIMIR PARENTESESESQUERDO expr PARENTESESDIREITO { std::cout << $3 << std::endl; }
+	IMPRIMIR PARENTESESESQUERDO expr PARENTESESDIREITO { std::cout << $3 << std::endl; } //{ std::cout << $3 << std::endl;} // { tabelahash.imprimir($3, IDENTIFICADOR ) }
+   | IMPRIMIR PARENTESESESQUERDO IDENTIFICADOR PARENTESESDIREITO { std::cout << hashMap[ *$3 ] << std::endl; }
    ;
 
 expr:
@@ -199,7 +201,6 @@ termo:
 fator:
 	PARENTESESESQUERDO expr PARENTESESDIREITO { $$ = $2;}
 	| INTEIRO { $$ = $1;}
-   | IDENTIFICADOR { $$ = hashMap[ *$1 ];}
    ;
 
 %%

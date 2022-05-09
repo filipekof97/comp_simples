@@ -11,7 +11,6 @@
 #define COL(col) driver.location_->columns(col)
 #define LINE(line) do {driver.location_->lines(line);} while (0)
 #define YY_USER_ACTION COL(yyleng);
-#define MAX_STR_CONST 1024
 
 /* import the parser's token type into a local typedef */
 typedef Simples::Parser::token token;
@@ -20,9 +19,6 @@ typedef Simples::Parser::token_type token_type;
 /* By default yylex returns int, we use token_type. Unfortunately yyterminate
  * by default returns 0, which is not of token_type. */
 #define yyterminate() return token::TOK_EOF
-
-char string_buf[MAX_STR_CONST];
-char *string_buf_ptr;
 
 %}
 
@@ -56,9 +52,8 @@ blank   [ \t]+
 eol     [\n\r]+
 
 /* Start Conditions */
-%x commentStartCond
-%x stringStartCond
-%s instring
+%x comentario
+
 
 %%
 
@@ -120,7 +115,6 @@ eol     [\n\r]+
 
 "imprimir"   {return token::IMPRIMIR;}
 
-
  /*** BEGIN EXAMPLE - Change the example lexer rules below ***/
 
 [0-9]+ {
@@ -141,6 +135,12 @@ eol     [\n\r]+
 \"([^\\\"]|\\.)*\"  {
   yylval->stringVal = new std::string(yytext, yyleng);
   return token::CADEIA;
+}
+
+"/*" BEGIN(comentario);
+<comentario>"*/" {
+   BEGIN(INITIAL);
+   STEP();
 }
 
 
